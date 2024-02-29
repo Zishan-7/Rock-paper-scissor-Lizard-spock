@@ -3,7 +3,10 @@
 import React, { useState } from "react";
 import Moves from "./Moves";
 import Button from "./Button";
-
+import { startGame } from "@/services/contractServices";
+import Loading from "./Loading";
+import { useEstimateFeesPerGas } from "wagmi";
+import { sepolia } from "wagmi/chains";
 interface Player1ViewI {
   setStage: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -11,6 +14,43 @@ interface Player1ViewI {
 const Player1View: React.FC<Player1ViewI> = ({ setStage }) => {
   const [stake, setStake] = useState<string>("0");
   const [player1Move, setPlayer1Move] = useState<number>(0);
+  const [isLoading, setisLoading] = useState<boolean>(false);
+
+  const { data } = useEstimateFeesPerGas({
+    chainId: sepolia.id,
+  });
+
+  const initializeGame = async () => {
+    try {
+      if (parseFloat(stake) <= 0) {
+        alert("Stake must be greater than zero");
+        return;
+      }
+      if (player1Move === 0) {
+        alert("Please select your move");
+        return;
+      }
+
+      setisLoading(true);
+      if (data) {
+        await startGame(
+          stake,
+          player1Move,
+          data.maxPriorityFeePerGas,
+          data.maxFeePerGas
+        );
+        setStage(2);
+      }
+    } catch {
+      alert("Some error occured");
+    } finally {
+      setisLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="text-black flex flex-col w-full px-10">
@@ -31,7 +71,12 @@ const Player1View: React.FC<Player1ViewI> = ({ setStage }) => {
       <Moves playerMove={player1Move} setPlayerMove={setPlayer1Move} />
 
       <span className="mt-6 w-1/2 flex justify-center items-center">
-        <Button isSelected className="w-56" text="Submit" />
+        <Button
+          isSelected
+          className="w-56"
+          text="Submit"
+          onClick={initializeGame}
+        />
       </span>
     </div>
   );

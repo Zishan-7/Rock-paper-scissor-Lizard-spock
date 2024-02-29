@@ -9,9 +9,9 @@ import { useAccount } from "wagmi";
 
 export default function Home() {
   const [stage, setStage] = useState(1);
-  const { isConnected } = useAccount();
+  const { isDisconnected } = useAccount();
 
-  if (!isConnected) {
+  if (isDisconnected) {
     return <ConnectWalletPage />;
   }
 
