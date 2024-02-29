@@ -57,23 +57,23 @@ const CheckWinner: React.FC<CheckWinnerI> = ({ setStage }) => {
     <div className="flex gap-x-5 w-full justify-center items-center">
       <div className="text-black flex flex-col  w-1/2">
         {winner && (
-          <h2 className="text-2xl mt-6 font-bold">
+          <h2 className="text-2xl mt-6 font-bold mx-auto">
             {winner === 0 ? "Game tied!" : ` Congrats! Player ${winner} won`}
           </h2>
         )}
-        <span className="mt-6 w-full flex-col flex justify-center items-center">
-          <Button
-            isSelected
-            className="w-56"
-            text="Check Result"
-            onClick={handleSolveGame}
-          />
+        {!winner && (
+          <span className="mt-6 w-full flex-col flex justify-center items-center">
+            <Button
+              isSelected
+              className="w-56"
+              text="Check Result"
+              onClick={handleSolveGame}
+            />
 
-          <p className="text-sm mt-2">
-            Please switch to the first account before submitting
-          </p>
+            <p className="text-sm mt-2">
+              Please switch to the first account before submitting
+            </p>
 
-          {!winner && (
             <p className="mt-4 text-xl">
               Player 1 not responding?{" "}
               <span
@@ -83,8 +83,8 @@ const CheckWinner: React.FC<CheckWinnerI> = ({ setStage }) => {
                 Click here
               </span>
             </p>
-          )}
-        </span>
+          </span>
+        )}
       </div>
     </div>
   );
