@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import WagmiContext from "@/Providers/WagmiContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,7 @@ export default function RootLayout({
           <h1 className="text-3xl font-semibold mb-10">
             Rock-Paper-Scissor-Lizard-Spock game
           </h1>
-          {children}
+          <WagmiContext>{children}</WagmiContext>
         </main>
       </body>
     </html>
